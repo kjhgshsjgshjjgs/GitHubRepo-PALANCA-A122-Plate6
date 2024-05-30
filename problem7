@@ -1,0 +1,49 @@
+import java.util.*;
+
+public class Problem7 {
+
+    public static void main(String[] args) {
+        try (Scanner scanner = new Scanner(System.in)) {
+
+        System.out.print("How many vertices does your graph have? ");
+        int numVertices = scanner.nextInt();
+
+        System.out.print("How many edges does your graph have? ");
+        int numEdges = scanner.nextInt();
+
+        int[][] edges = new int[numEdges][2];
+        int[] edgeCounts = new int[numEdges];
+
+        System.out.println("Input vertex pairs associated with edges and their counts:");
+        for (int i = 0; i < numEdges; i++) {
+            System.out.print("Input the vertices connected by edge " + (i + 1) + " (separated by a space): ");
+            edges[i][0] = scanner.nextInt();
+            edges[i][1] = scanner.nextInt();
+            System.out.print("How many times does edge " + (i + 1) + " appear? ");
+            edgeCounts[i] = scanner.nextInt();
+        }
+
+        int[][] incidenceMatrix = constructIncidenceMatrix(numVertices, numEdges, edges, edgeCounts);
+
+        System.out.println("\nHere's the Incidence Matrix:");
+        for (int i = 0; i < incidenceMatrix.length; i++) {
+            for (int j = 0; j < incidenceMatrix[i].length; j++) {
+                System.out.print(incidenceMatrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+    }
+    public static int[][] constructIncidenceMatrix(int numVertices, int numEdges, int[][] edges, int[] edgeCounts) {
+        int[][] incidenceMatrix = new int[numVertices][numEdges];
+
+        for (int i = 0; i < numEdges; i++) {
+            int v1 = edges[i][0] - 1; // Adjusting for 0-based indexing
+            int v2 = edges[i][1] - 1;
+            incidenceMatrix[v1][i] = edgeCounts[i];
+            incidenceMatrix[v2][i] = edgeCounts[i];
+        }
+
+        return incidenceMatrix;
+    }
+}
