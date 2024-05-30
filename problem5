@@ -1,0 +1,105 @@
+import java.util.*;
+
+public class BipartiteYesOrNo {
+    static class Graph {
+        private int V; // Number of vertices
+        private LinkedList<Integer> adj[]; // Adjacency List
+
+        // Constructor
+        Graph(int v) {
+            V = v;
+            adj = new LinkedList[v];
+            for (int i = 0; i < v; ++i) {
+                adj[i] = new LinkedList();
+            }
+        }
+
+        // Function to add an edge into the graph
+        void addEdge(int v, int w) {
+            adj[v].add(w);
+            adj[w].add(v); // Since the graph is undirected
+        }
+
+        // Function to check whether the graph is bipartite or not
+        boolean isBipartite(int src) {
+            // Create a color array to store colors assigned to all vertices.
+            // -1 means no color is assigned yet.
+            int[] colorArr = new int[V];
+            Arrays.fill(colorArr, -1);
+
+            // Assign first color to the source vertex
+            colorArr[src] = 1;
+
+            // Create a queue (FIFO) of vertex numbers and enqueue source vertex for BFS traversal
+            LinkedList<Integer> queue = new LinkedList<Integer>();
+            queue.add(src);
+
+            // Run while there are vertices in the queue (similar to BFS)
+            while (!queue.isEmpty()) {
+                // Dequeue a vertex from the queue
+                int u = queue.poll();
+
+                // Return false if there is a self-loop
+                if (adj[u].contains(u)) {
+                    return false;
+                }
+
+                // Find all non-colored adjacent vertices
+                for (int v : adj[u]) {
+                    // If the adjacent vertex is not colored, assign alternate color to this adjacent vertex
+                    if (colorArr[v] == -1) {
+                        colorArr[v] = 1 - colorArr[u];
+                        queue.add(v);
+                    }
+                    // If the adjacent vertex has the same color as the current vertex, then the graph is not bipartite
+                    else if (colorArr[v] == colorArr[u]) {
+                        return false;
+                    }
+                }
+            }
+            // If we reach here, then all adjacent vertices can be colored with alternate color
+            return true;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Input the number of vertices
+        System.out.print("Input the number of vertices: ");
+        int V = scanner.nextInt();
+
+        Graph g = new Graph(V);
+
+        // Input the number of edges
+        System.out.print("Input the number of edges: ");
+        int E = scanner.nextInt();
+
+        // Input all the edges
+        System.out.println("Input the edges (format: u v):");
+        for (int i = 0; i < E; i++) {
+            int u = scanner.nextInt();
+            int v = scanner.nextInt();
+            g.addEdge(u, v);
+        }
+
+        // Check all connected components of the graph
+        boolean isBipartite = true;
+        for (int i = 0; i < V; i++) {
+            if (g.isBipartite(i)) {
+                continue;
+            } else {
+                isBipartite = false;
+                break;
+            }
+        }
+
+        if (isBipartite) {
+            System.out.println("Yes, the graph is bipartite");
+        } else {
+            System.out.println("No, the graph is not bipartite");
+        }
+
+        scanner.close();
+    }
+}
