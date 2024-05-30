@@ -1,0 +1,73 @@
+import java.util.*;
+
+public class Problem3 {
+    private int V;
+    private List<List<Integer>> adj;
+
+    public Problem3(int v) {
+        V = v;
+        adj = new ArrayList<>(V);
+        for (int i = 0; i < V; ++i)
+            adj.add(new ArrayList<>());
+    }
+
+    public void addEdge(int v, int w) {
+        adj.get(v).add(w);
+    }
+
+    public boolean hasCycle() {
+        boolean[] visited = new boolean[V];
+        boolean[] recStack = new boolean[V];
+
+        for (int i = 0; i < V; i++) {
+            if (isCyclicUtil(i, visited, recStack)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isCyclicUtil(int v, boolean[] visited, boolean[] recStack) {
+        if (recStack[v])
+            return true;
+        if (visited[v])
+            return false;
+
+        visited[v] = true;
+        recStack[v] = true;
+
+        List<Integer> neighbors = adj.get(v);
+        for (Integer neighbor : neighbors) {
+            if (isCyclicUtil(neighbor, visited, recStack))
+                return true;
+        }
+
+        recStack[v] = false;
+        return false;
+    }
+
+    public static void main(String args[]) {
+        try (Scanner scanner = new Scanner(System.in)) {
+
+        System.out.print("Input the number of vertices: ");
+        int V = scanner.nextInt();
+
+        System.out.print("Input the number of edges: ");
+        int E = scanner.nextInt();
+
+        Problem3 graph = new Problem3(V);
+
+        System.out.println("Input the edges (vertex1 vertex2):");
+        for (int i = 0; i < E; i++) {
+            int from = scanner.nextInt();
+            int to = scanner.nextInt();
+            graph.addEdge(from, to);
+        }
+
+        if (graph.hasCycle())
+            System.out.println("The graph has a cycle.");
+        else
+            System.out.println("The graph does not have a cycle.");
+    }
+}
+}
