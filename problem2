@@ -1,0 +1,41 @@
+import java.util.*;
+
+public class Problem2 {
+
+    public static void main(String[] args) {
+        try (Scanner scanner = new Scanner(System.in)) {
+
+        System.out.print("Input the number of vertices: ");
+        int vertices = scanner.nextInt();
+
+        int[][] adjacencyMatrix = new int[vertices][vertices];
+
+        System.out.println("Input the adjacency matrix:");
+        for (int i = 0; i < vertices; i++) {
+            for (int j = 0; j < vertices; j++) {
+                adjacencyMatrix[i][j] = scanner.nextInt();
+            }
+        }
+
+        System.out.println("Edges of the graph and their counts:");
+        countEdges(adjacencyMatrix);
+    }
+    }
+
+    public static void countEdges(int[][] adjacencyMatrix) {
+        Map<String, Integer> edgesCount = new HashMap<>();
+
+        for (int i = 0; i < adjacencyMatrix.length; i++) {
+            for (int j = i; j < adjacencyMatrix[i].length; j++) {
+                if (adjacencyMatrix[i][j] == 1) {
+                    String edge = "(" + i + ", " + j + ")";
+                    edgesCount.put(edge, edgesCount.getOrDefault(edge, 0) + 1);
+                }
+            }
+        }
+
+        for (Map.Entry<String, Integer> entry : edgesCount.entrySet()) {
+            System.out.println("Edge " + entry.getKey() + " appears " + entry.getValue() + " times.");
+        }
+    }
+}
