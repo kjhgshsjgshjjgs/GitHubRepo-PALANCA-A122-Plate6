@@ -1,0 +1,77 @@
+import java.util.*;
+
+public class GraphConnectivity {
+    private int vertices;
+    private LinkedList<Integer> adj[];
+
+    GraphConnectivity(int v) {
+        vertices = v;
+        adj = new LinkedList[v];
+        for (int i = 0; i < v; ++i)
+            adj[i] = new LinkedList<Integer>();
+    }
+
+    void addEdge(int v, int w) {
+        adj[v].add(w);
+        adj[w].add(v);
+    }
+
+    boolean isConnected() {
+        boolean visited[] = new boolean[vertices];
+        depthFirstSearch(0, visited);
+
+        for (int i = 0; i < vertices; i++) {
+            if (!visited[i])
+                return false;
+        }
+        return true;
+    }
+
+    void depthFirstSearch(int v, boolean visited[]) {
+        visited[v] = true;
+
+        Iterator<Integer> it = adj[v].iterator();
+        while (it.hasNext()) {
+            int n = it.next();
+            if (!visited[n])
+                depthFirstSearch(n, visited);
+        }
+    }
+
+    int countConnectedComponents() {
+        boolean visited[] = new boolean[vertices];
+        int count = 0;
+        for (int i = 0; i < vertices; ++i) {
+            if (!visited[i]) {
+                depthFirstSearch(i, visited);
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static void main(String args[]) {
+        try (Scanner scanner = new Scanner(System.in)) {
+
+            System.out.print("Input the number of vertices: ");
+            int vertices = scanner.nextInt();
+            System.out.print("Input the number of edges: ");
+            int edges = scanner.nextInt();
+
+            GraphConnectivity graph = new GraphConnectivity(vertices);
+            System.out.println("\nEnter the edges (vertex1 vertex2):");
+            for (int i = 0; i < edges; i++) {
+                int from = scanner.nextInt();
+                int to = scanner.nextInt();
+                graph.addEdge(from, to);
+            }
+
+            if (graph.isConnected()) {
+                System.out.println("The graph is connected.");
+            } else {
+                int components = graph.countConnectedComponents();
+                System.out.println("The graph is not connected. It has " + components + " connected components.");
+            }
+        }
+    }
+}
