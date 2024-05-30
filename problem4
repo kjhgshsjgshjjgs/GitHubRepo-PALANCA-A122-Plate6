@@ -1,0 +1,29 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Problem4 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Map<Integer, Integer> vertexDegree = new HashMap<>();
+
+        System.out.println("Input the number of edges:");
+        int numberOfEdges = scanner.nextInt();
+
+        System.out.println("Input the pairs of vertices (each pair on a new line):");
+        for (int i = 0; i < numberOfEdges; i++) {
+            int vertex1 = scanner.nextInt();
+            int vertex2 = scanner.nextInt();
+
+            vertexDegree.put(vertex1, vertexDegree.getOrDefault(vertex1, 0) + 1);
+            vertexDegree.put(vertex2, vertexDegree.getOrDefault(vertex2, 0) + 1);
+        }
+
+        System.out.println("Degrees of vertices:");
+        for (Map.Entry<Integer, Integer> entry : vertexDegree.entrySet()) {
+            System.out.println("Vertex " + entry.getKey() + " has degree " + entry.getValue());
+        }
+
+        scanner.close();
+    }
+}
